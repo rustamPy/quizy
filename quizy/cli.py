@@ -290,7 +290,9 @@ class QuizCLI:
         )
 
         for prompt in question.prompts:
-            print(f"\n{QuizCLI.BLUE}{prompt}{QuizCLI.RESET} matches with:")
+            print(
+                f"\n{QuizCLI.BLUE}{prompt}{QuizCLI.RESET} {"matches with" if not question.metadata.get("prompt_key") else question.metadata.get("prompt_key")}:"
+            )
             for idx, answer in enumerate(question.display_answers, 1):
                 print(f"  {QuizCLI.BLUE}{idx}.{QuizCLI.RESET} {answer}")
 
