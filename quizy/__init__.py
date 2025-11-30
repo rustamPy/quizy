@@ -1,10 +1,39 @@
 """
-Quiz - A simple Python quiz framework
+Quizy - A professional Python quiz framework
 """
 
-from .core import Quiz, Question
-from .quiz_102 import quiz_102
+from .core import (
+    Quiz,
+    Question,
+    QuestionType,
+    MultipleChoiceQuestion,
+    MultipleSelectQuestion,
+    ShortTextQuestion,
+    TrueFalseQuestion,
+    MatchingQuestion,
+    QuizResult,
+    QuestionResult,
+    ResultStatus,
+)
+from .cli import QuizCLI, TimerManager
 from .quiz_101 import quiz_101
+from .quiz_102 import quiz_102
 
-__version__ = "0.1.4"
-__all__ = ["Quiz", "Question", "quiz_102", "quiz_101"]
+__version__ = "0.3.0"
+__all__ = [
+    "Quiz",
+    "Question",
+    "QuestionType",
+    "MultipleChoiceQuestion",
+    "MultipleSelectQuestion",
+    "ShortTextQuestion",
+    "TrueFalseQuestion",
+    "MatchingQuestion",
+    "QuizResult",
+    "QuestionResult",
+    "ResultStatus",
+    "QuizCLI",
+    "TimerManager",
+    "quiz_101",
+    "quiz_102",
+]

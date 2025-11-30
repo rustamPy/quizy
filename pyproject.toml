@@ -1,6 +1,6 @@
 [project]
 name = "quizy"
-version = "0.1.4"
+version = "0.3.0"
 description = "A simple, elegant Python framework for creating and running interactive quizzes"
 authors = [
     { name="Rustam Karimov", email="karimov.rustam.live@gmail.com" }

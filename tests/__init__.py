@@ -1,0 +1,1 @@
+"""Quizy test suite"""
