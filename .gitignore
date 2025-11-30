@@ -90,4 +90,5 @@ cython_debug/
 scratch/
 temp/
 tmp/
+*.ipynb
 quizy.egg-info/
