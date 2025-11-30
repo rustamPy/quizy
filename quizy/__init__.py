@@ -1,5 +1,6 @@
 """
 Quizy - A professional Python quiz framework
+Version 0.3.0 - Enhanced with async support, live timers, and interactivity
 """
 
 from .core import (
@@ -15,11 +16,11 @@ from .core import (
     QuestionResult,
     ResultStatus,
 )
-from .cli import QuizCLI, TimerManager
+from .cli import QuizCLI, TimerDisplay
 from .quiz_101 import quiz_101
 from .quiz_102 import quiz_102
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"
 __all__ = [
     "Quiz",
     "Question",
@@ -33,7 +34,7 @@ __all__ = [
     "QuestionResult",
     "ResultStatus",
     "QuizCLI",
-    "TimerManager",
+    "TimerDisplay",
     "quiz_101",
     "quiz_102",
 ]
