@@ -1,0 +1,42 @@
+[project]
+name = "quizy"
+version = "0.1.2"
+description = "A simple, elegant Python framework for creating and running interactive quizzes"
+authors = [
+    { name="Rustam Karimov", email="karimov.rustam.live@gmail.com" }
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+keywords = ["quiz", "education", "learning", "interactive", "assessment", "testing"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "Intended Audience :: Developers",
+    "Topic :: Education :: Testing",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/rustampy/quizy"
+Repository = "https://github.com/rustampy/quizy"
+Documentation = "https://github.com/rustampy/quizy#readme"
+"Bug Tracker" = "https://github.com/rustampy/quizy/issues"
+
+[project.scripts]
+quizy = "quizy.main:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["quizy"]
