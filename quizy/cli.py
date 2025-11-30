@@ -1,14 +1,3 @@
-"""
-Enhanced CLI utilities with async support, live timer display, and interactive feedback
-Improvements:
-- Live countdown timer display
-- Better formatted output with progress indicators
-- Async support for non-blocking I/O
-- Enhanced user feedback and visual formatting
-- Smart time management and warnings
-"""
-
-import asyncio
 import sys
 import time
 import threading
@@ -81,7 +70,6 @@ class TimerDisplay:
 class QuizCLI:
     """Enhanced CLI for interactive quiz sessions with live feedback"""
 
-    # ANSI color codes
     BOLD = "\033[1m"
     GREEN = "\033[92m"
     RED = "\033[91m"
@@ -177,18 +165,67 @@ class QuizCLI:
 
     @staticmethod
     def _prompt_input(prompt: str, timer: Optional[TimerDisplay] = None) -> str:
-        """Get input with optional timer display"""
+        """Get input with optional timer display and live refresh"""
         if timer:
-            QuizCLI._display_timer_prompt(prompt, timer)
+            return QuizCLI._prompt_input_with_timer(prompt, timer)
         return input(f"\n{prompt}").strip()
 
     @staticmethod
-    def _display_timer_prompt(prompt: str, timer: TimerDisplay) -> None:
-        """Show prompt with timer"""
-        remaining = timer.get_remaining()
-        warning = timer.get_warning_symbol()
-        time_str = timer.format_time(remaining)
-        print(f"{warning} Time remaining: {time_str}")
+    def _prompt_input_with_timer(prompt: str, timer: TimerDisplay) -> str:
+        """Get input with live timer refresh in background"""
+        import queue
+
+        input_queue = queue.Queue()
+        stop_timer = threading.Event()
+        timer_started = False
+
+        def input_thread():
+            try:
+                user_input = input(f"\n{prompt}")
+                input_queue.put(user_input)
+            finally:
+                stop_timer.set()
+
+        def timer_refresh_thread():
+            nonlocal timer_started
+            last_remaining = None
+
+            while not stop_timer.is_set():
+                remaining = timer.get_remaining()
+                if int(remaining) != int(last_remaining or remaining):
+                    last_remaining = remaining
+                    warning = timer.get_warning_symbol()
+                    time_str = timer.format_time(remaining)
+
+                    if timer_started:
+                        sys.stdout.write(f"\033[F{QuizCLI.CLEAR_LINE}")
+                    else:
+                        timer_started = True
+
+                    sys.stdout.write(f"{warning} Time remaining: {time_str}\n")
+                    sys.stdout.flush()
+
+                if timer.is_expired():
+                    stop_timer.set()
+                    break
+
+                time.sleep(0.05)
+
+        input_t = threading.Thread(target=input_thread, daemon=True)
+        timer_t = threading.Thread(target=timer_refresh_thread, daemon=True)
+
+        input_t.start()
+        timer_t.start()
+
+        timeout = timer.get_remaining()
+        try:
+            result = input_queue.get(timeout=timeout + 1)
+            stop_timer.set()
+            time.sleep(0.1)
+            return result.strip()
+        except:
+            stop_timer.set()
+            return ""
 
     @staticmethod
     def _get_choice_answer(
@@ -291,7 +328,7 @@ class QuizCLI:
 
         for prompt in question.prompts:
             print(
-                f"\n{QuizCLI.BLUE}{prompt}{QuizCLI.RESET} {"matches with" if not question.metadata.get("prompt_key") else question.metadata.get("prompt_key")}:"
+                f"\n{QuizCLI.BLUE}{prompt}{QuizCLI.RESET} {'matches with' if not question.metadata.get('prompt_key') else question.metadata.get('prompt_key')}:"
             )
             for idx, answer in enumerate(question.display_answers, 1):
                 print(f"  {QuizCLI.BLUE}{idx}.{QuizCLI.RESET} {answer}")
@@ -412,7 +449,6 @@ class QuizCLI:
             return
 
         try:
-            # Create quiz timer if total time limit set
             quiz_timer = (
                 TimerDisplay(quiz.time_limit)
                 if quiz.time_limit and show_timer
@@ -439,7 +475,6 @@ class QuizCLI:
 
             QuizCLI.display_result(result)
 
-            # Ask to show detailed results
             try:
                 show_detail = input("Show detailed results? (y/n): ").strip().lower()
                 if show_detail == "y":
@@ -481,7 +516,6 @@ class QuizCLI:
 
             async def answer_provider(q: Question, idx: int) -> Optional[Any]:
                 """Get answer asynchronously"""
-                # For now, still synchronous - can be enhanced with aioinput
                 question_timer = (
                     TimerDisplay(q.time_limit) if q.time_limit and show_timer else None
                 )
