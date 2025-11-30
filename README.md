@@ -34,9 +34,9 @@ print(f"Score: {result.score_percentage}%")
 
 Complete documentation is available in the docs folder:
 
-- [Question Types Guide](docs/QUESTION_TYPES.md) - All supported question types with code examples
-- [Usage Examples](docs/EXAMPLES.md) - Real-world examples including timers, callbacks, and web integration
-- [API Reference](docs/API.md) - Complete API documentation with constructors and methods
+- [Question Types Guide](https://github.com/rustamPy/quizy/blob/main/docs/QUESTION_TYPES.md) - All supported question types with code examples
+- [Usage Examples](https://github.com/rustamPy/quizy/blob/main/docs/EXAMPLES.md) - Real-world examples including timers, callbacks, and web integration
+- [API Reference](https://github.com/rustamPy/quizy/blob/main/docs/API.md) - Complete API documentation with constructors and methods
 
 ## Installation
 
