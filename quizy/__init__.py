@@ -20,7 +20,7 @@ from .cli import QuizCLI, TimerDisplay
 from .quiz_101 import quiz_101
 from .quiz_102 import quiz_102
 
-__version__ = "0.3.1"
+__version__ = "0.3.3"
 __all__ = [
     "Quiz",
     "Question",

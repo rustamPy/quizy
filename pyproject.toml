@@ -1,6 +1,6 @@
 [project]
 name = "quizy"
-version = "0.3.1"
+version = "0.3.3"
 description = "A simple, elegant Python framework for creating and running interactive quizzes"
 authors = [
     { name="Rustam Karimov", email="karimov.rustam.live@gmail.com" }
@@ -21,6 +21,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
