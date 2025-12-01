@@ -232,10 +232,6 @@ from quizy import (
 quiz = Quiz(title="My Quiz", time_limit=60)
 ```
 
-### No "Improved" Modules
-
-There are no separate `core_improved.py` or `cli_improved.py` modules. The original `core.py` and `cli.py` have been replaced with the enhanced versions.
-
 ## Performance Considerations
 
 ### Async vs Sync
@@ -282,11 +278,6 @@ Timer display has minimal overhead:
    q.time_limit = 15  # or in constructor
    ```
 
-3. **Update imports if using enhanced features**:
-   ```python
-   # For async, use core_improved
-   from quizy.core_improved import Quiz
-   ```
 
 ## Examples
 
