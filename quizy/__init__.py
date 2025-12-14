@@ -17,7 +17,7 @@ from .core import (
 )
 from .cli import QuizCLI, TimerDisplay
 
-__version__ = "0.4.7"
+__version__ = "0.4.8"
 __all__ = [
     "Quiz",
     "Question",
