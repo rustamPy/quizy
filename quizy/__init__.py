@@ -17,10 +17,8 @@ from .core import (
     ResultStatus,
 )
 from .cli import QuizCLI, TimerDisplay
-from .quiz_101 import quiz_101
-from .quiz_102 import quiz_102
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 __all__ = [
     "Quiz",
     "Question",
