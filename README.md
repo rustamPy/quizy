@@ -348,15 +348,181 @@ asyncio.run(main())
 3. **Option shuffling**: Once shuffled, cannot be re-shuffled in same instance
 4. **Partial credit**: Some question types (Short Text) don't support partial credit
 
+## 8. AI-Powered Question Generation
+
+Generate quiz questions automatically using OpenAI's GPT models:
+
+```python
+import asyncio
+from quizy import Quiz
+from quizy.ai_generator import AIQuestionGenerator
+from quizy.core import QuestionType
+
+async def main():
+    # Initialize generator
+    generator = AIQuestionGenerator(api_key="your-openai-key")
+
+    # Generate a complete quiz
+    questions = await generator.generate_quiz(
+        topic="Python Programming",
+        num_questions=5,
+        question_types=[
+            QuestionType.MULTIPLE_CHOICE,
+            QuestionType.TRUE_FALSE,
+            QuestionType.MULTIPLE_SELECT,
+            QuestionType.MULTIPLE_CHOICE,
+            QuestionType.SHORT_TEXT,
+        ],
+        difficulty="medium"
+    )
+
+    # Create quiz from AI-generated questions
+    quiz = Quiz(title="AI-Generated Python Quiz")
+    for question in questions:
+        quiz.add_question(question)
+
+    result = await quiz.execute_async(answer_provider=get_answer)
+
+asyncio.run(main())
+```
+
+### Setup
+
+1. **Install the package with AI support**:
+   ```bash
+   pip install quizy openai
+   ```
+
+2. **Set your OpenAI API key**:
+   ```bash
+   export OPENAI_API_KEY="sk-..."
+   ```
+
+   Or pass it directly:
+   ```python
+   generator = AIQuestionGenerator(api_key="sk-...")
+   ```
+
+### Supported Question Types
+
+- **MULTIPLE_CHOICE**: Traditional multiple choice with single correct answer
+- **TRUE_FALSE**: Binary true/false questions
+- **SHORT_TEXT**: Free-form text answers
+- **MULTIPLE_SELECT**: Select all correct answers from a list
+- **MATCHING**: Match items to descriptions
+
+### Difficulty Levels
+
+- `easy`: Basic knowledge recall
+- `medium`: Requires understanding and application
+- `hard`: Requires analysis and synthesis
+
+### Asynchronous Generation
+
+Generate multiple questions concurrently for better performance:
+
+```python
+import asyncio
+from quizy.ai_generator import AIQuestionGenerator
+from quizy.core import QuestionType
+
+async def create_quiz():
+    generator = AIQuestionGenerator()
+    
+    # Generate 10 questions concurrently
+    questions = await generator.generate_quiz(
+        topic="Web Development",
+        num_questions=10,
+        difficulty="medium",
+        question_types=[QuestionType.MULTIPLE_CHOICE] * 10
+    )
+    
+    return questions
+
+questions = asyncio.run(create_quiz())
+```
+
+### Generation with Context
+
+Provide reading material or specific context for question generation:
+
+```python
+import asyncio
+from quizy.ai_generator import AIQuestionGenerator
+
+async def main():
+    generator = AIQuestionGenerator()
+    
+    context = """
+    Photosynthesis is the process by which plants use sunlight to synthesize 
+    carbohydrates from carbon dioxide and water. It occurs in two stages: 
+    light-dependent reactions and the Calvin cycle...
+    """
+    
+    questions = await generator.generate_quiz(
+        topic="Photosynthesis",
+        num_questions=5,
+        context=context,
+        difficulty="medium"
+    )
+
+asyncio.run(main())
+```
+
+### Complete Example
+
+```python
+import asyncio
+from quizy import Quiz, QuizCLI
+from quizy.ai_generator import AIQuestionGenerator
+from quizy.core import QuestionType
+
+async def create_and_run_ai_quiz():
+    # Initialize generator
+    generator = AIQuestionGenerator()
+    
+    # Generate quiz asynchronously
+    print("Generating quiz questions...")
+    questions = await generator.generate_quiz(
+        topic="Python Async Programming",
+        num_questions=5,
+        difficulty="hard",
+        question_types=[
+            QuestionType.MULTIPLE_CHOICE,
+            QuestionType.TRUE_FALSE,
+            QuestionType.MULTIPLE_SELECT,
+            QuestionType.MULTIPLE_CHOICE,
+            QuestionType.SHORT_TEXT,
+        ]
+    )
+    
+    # Create and run quiz
+    quiz = Quiz(
+        title="AI-Generated Python Async Quiz",
+        time_limit=300,  # 5 minutes
+        show_progress=True
+    )
+    
+    for q in questions:
+        quiz.add_question(q)
+    
+    # Run with CLI
+    QuizCLI.run_interactive(quiz, show_timer=True)
+
+# Run
+asyncio.run(create_and_run_ai_quiz())
+```
+
 ## Future Enhancements
 
-Planned for v0.4+:
+Planned for v0.5+:
 - Web-based UI components
 - Database integration for result persistence
 - Advanced analytics and reporting
 - Real-time leaderboards
-- Ai-powered question generation
+- Support for more AI providers (Claude, Gemini, etc.)
 - More partial credit options
+- Fine-tuning for domain-specific questions
 
 ## Support & Contributions
 
