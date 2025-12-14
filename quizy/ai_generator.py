@@ -43,7 +43,7 @@ class AIQuestionGenerator:
         self.model = model
         self.temperature = temperature
 
-    def generate_quiz(
+    def generate_questions_set(
         self,
         topic: str,
         num_questions: int = 5,
@@ -67,7 +67,7 @@ class AIQuestionGenerator:
             List of generated Question objects
         """
         return asyncio.run(
-            self.generate_quiz_async(
+            self.generate_questions_set_async(
                 topic=topic,
                 num_questions=num_questions,
                 question_types=question_types,
@@ -148,7 +148,7 @@ class AIQuestionGenerator:
             print(f"Error parsing AI response: {e}")
             return None
 
-    async def generate_quiz_async(
+    async def generate_questions_set_async(
         self,
         topic: str,
         num_questions: int = 5,
