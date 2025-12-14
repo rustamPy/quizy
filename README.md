@@ -18,7 +18,7 @@ A lightweight, API-first Python quiz framework for creating interactive quizzes 
 pip install quizy # comes with OpenAI
 ```
 
-## Manual Questions
+## Adding Manual Questions
 
 Create different question types:
 
@@ -49,50 +49,108 @@ quiz.add_question(MatchingQuestion(
     time_limit=15
 ))
 
-# Execute
-result = quiz.execute(answer_provider=lambda q, idx: input(q.text + "\n> "))
+# Define a synchronous answer provider for terminal input
+def your_answer_provider(question, idx):
+    print(f"\nQuestion {idx+1}: {question.text}")
+
+    # Show options if available
+    options = question.get_options()
+    if options:
+        for i, opt in enumerate(options, 1):
+            print(f"{i}. {opt}")
+
+    # Get user input
+    user_input = input("> ")
+
+    # Convert input to correct option if needed
+    if options:
+        try:
+            choice = int(user_input)
+            return question.get_option_by_index(choice)
+        except:
+            return user_input.strip()
+    return user_input.strip()
+
+
+# Run the quiz synchronously (if you use in the terminal)
+result = quiz.execute(your_answer_provider)
 print(f"Score: {result.score_percentage:.1f}%")
 ```
 
-## AI-Generated Questions
+## Adding AI-Generated Questions
 
 Generate quiz questions automatically using OpenAI and test it on terminal using QuizCLI:
 
 ```python
-import asyncio
-from quizy import Quiz, QuizCLI
+from quizy import Quiz, QuestionType
 from quizy.ai_generator import AIQuestionGenerator
-from quizy.core import QuestionType
+import time
 
-async def my_quiz():
-    # Initialize the AI question generator
-    generator = AIQuestionGenerator()
+# Initialize AI generator
+generator = AIQuestionGenerator()
 
-    # Generate questions asynchronously
-    questions = await generator.generate_questions_set_async(
-        topic="Python Programming",
-        num_questions=5,
-        question_types=[
-            QuestionType.MULTIPLE_CHOICE,
-            QuestionType.TRUE_FALSE,
-            QuestionType.MULTIPLE_SELECT,
-            QuestionType.SHORT_TEXT,
-            QuestionType.MATCHING,
-        ],
-        difficulty="medium"
-    )
+# Generate questions (synchronously)
+questions = generator.generate_questions_set(
+    topic="Python Programming",
+    num_questions=5,
+    question_types=[
+        QuestionType.MULTIPLE_CHOICE,
+        QuestionType.TRUE_FALSE,
+        QuestionType.MULTIPLE_SELECT,
+        QuestionType.SHORT_TEXT,
+        QuestionType.MATCHING,
+    ],
+    difficulty="medium"
+)
 
-    # Build the quiz
-    quiz = Quiz(title="AI-Generated Python Quiz", time_limit=300)
-    for q in questions:
-        if q:
-            quiz.add_question(q)
-    return quiz
+# Create the quiz
+quiz = Quiz(title="AI-Generated Python Quiz")
+for q in questions:
+    if q:
+        quiz.add_question(q)
 
-if __name__ == "__main__":
-    quiz = asyncio.run(my_quiz())
-    QuizCLI.run_interactive(quiz)
+# Define a synchronous answer provider for terminal input
+def your_answer_provider(question, idx):
+    print(f"\nQuestion {idx+1}: {question.text}")
 
+    # Show options if available
+    options = question.get_options()
+    if options:
+        for i, opt in enumerate(options, 1):
+            print(f"{i}. {opt}")
+
+    # Get user input
+    user_input = input("> ")
+
+    # Convert input to correct option if needed
+    if options:
+        try:
+            choice = int(user_input)
+            return question.get_option_by_index(choice)
+        except:
+            return user_input.strip()
+    return user_input.strip()
+
+# Run the quiz synchronously (if you use in the terminal)
+result = quiz.execute(your_answer_provider)
+
+# Show results
+print(f"\nQuiz completed! Score: {result.score_percentage:.1f}%")
+print(f"Correct answers: {result.correct_answers}/{result.total_questions}")
+```
+
+## Running Interactive Quizzes
+
+Use the CLI for formatted output with timers and progress:
+
+```python
+from quizy import QuizCLI
+
+# Run with timer display
+QuizCLI.run_interactive(quiz, show_timer=True)
+
+# Get detailed results breakdown
+QuizCLI.display_detailed_results(result)
 ```
 
 ## Question Types
