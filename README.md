@@ -18,6 +18,27 @@ A lightweight, API-first Python quiz framework for creating interactive quizzes 
 pip install quizy # comes with OpenAI
 ```
 
+## MCP Server Integration
+
+Use Quizy with GitHub Copilot via the Model Context Protocol (MCP). This allows AI to generate, validate, and analyze quizzes directly.
+
+```bash
+pip install quizy[mcp]
+```
+
+Then configure the MCP server in VS Code and use Copilot Chat:
+```
+@quizy Generate a Python quiz with 5 hard questions
+```
+
+**Available MCP Tools:**
+- `generate_quiz` - Create AI-powered questions
+- `validate_question` - Check question quality
+- `create_quiz_from_questions` - Build quiz objects
+- `analyze_difficulty` - Analyze question distribution
+
+For detailed setup instructions, see [docs/MCP_SETUP.md](https://github.com/rustamPy/quizy/blob/main/docs/MCP_SETUP.md).
+
 ## Adding Manual Questions
 
 Create different question types:
